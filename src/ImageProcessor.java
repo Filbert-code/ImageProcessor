@@ -9,15 +9,19 @@ import java.util.Scanner;
 
 public class ImageProcessor {
     public static void main(String[] args) throws IOException {
-//        createImage();
         // returns an array of rows, each containing RGB values corresponding to the color of the pixels in that row
         ArrayList<String> dataRows = fileInput();
         // get the number of rows and columns
         int row_num = Integer.parseInt(dataRows.get(0).split(" ")[0]) - 1;
         int col_num = Integer.parseInt(dataRows.get(0).split(" ")[1]);
 
-        BufferedImage canvas = new BufferedImage(col_num, row_num, BufferedImage.TYPE_INT_RGB);
+        BufferedImage canvas = painter(dataRows, row_num, col_num);
 
+        ImageIO.write(canvas, "PNG", new File("image.png"));
+    }
+
+    public static BufferedImage painter(ArrayList<String> dataRows, int row_num, int col_num) {
+        BufferedImage canvas = new BufferedImage(col_num, row_num, BufferedImage.TYPE_INT_RGB);
         for(int row = 1; row < row_num; row++) {
             String row_string = dataRows.get(row);
             String[] row_val_array = row_string.split(" ");
@@ -31,14 +35,11 @@ public class ImageProcessor {
                 int red = Integer.parseInt(row_val_array[col].substring(0,first_comma_ind));
                 int green = Integer.parseInt(row_val_array[col].substring(first_comma_ind+1,second_comma_ind));
                 int blue = Integer.parseInt(row_val_array[col].substring(second_comma_ind+1));
-//                // get RBG int number by doing bitwise operations on red, green, and blue int values
-//                Color white = new Color(red, green, blue);
-//                int rgb = white.getRGB();
 
                 canvas.setRGB(col, row, rgbBitShifter(red, green, blue));
             }
         }
-        ImageIO.write(canvas, "PNG", new File("image.png"));
+        return canvas;
     }
 
     public static int rgbBitShifter(int r, int g, int b) {
@@ -50,28 +51,10 @@ public class ImageProcessor {
         return red | green | blue | alpha;
     }
 
-    public static void createImage() throws IOException {
-        int width = 100;
-        int height = 100;
-        BufferedImage canvas = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
-        Color white = new Color(0, 255, 0);
-        int rgb = white.getRGB();
-        System.out.println(rgb);
-
-        for(int i = 0; i < width; i++) {
-            for(int j = 0; j < height; j++) {
-                canvas.setRGB(i, j, rgb);
-            }
-        }
-
-        ImageIO.write(canvas, "PNG", new File("image.png"));
-    }
-
     public static ArrayList<String> fileInput() {
         ArrayList<String> dataRows = new ArrayList<>();
         try{
-            File f = new File("test.dat");
+            File f = new File("image.dat");
             Scanner r = new Scanner(f);
             while(r.hasNextLine()) {
                 dataRows.add(r.nextLine());
