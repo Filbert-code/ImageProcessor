@@ -1,3 +1,8 @@
+/*
+ * This class takes a file of RGB color values as input and outputs the image produced from adding all the pixels
+ * to a canvas.
+ */
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -7,6 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/*
+    ImageProcessor class that takes a file of RGB color values and outputs an image in .PNG format.
+ */
 public class ImageProcessor {
     public static void main(String[] args) throws IOException {
         // returns an array of rows, each containing RGB values corresponding to the color of the pixels in that row
@@ -14,12 +22,14 @@ public class ImageProcessor {
         // get the number of rows and columns
         int row_num = Integer.parseInt(dataRows.get(0).split(" ")[0]) - 1;
         int col_num = Integer.parseInt(dataRows.get(0).split(" ")[1]);
-
+        // a BufferedImage instance used to add the pixel data onto and save as the output
         BufferedImage canvas = painter(dataRows, row_num, col_num);
-
+        // create the output .PNG file
         ImageIO.write(canvas, "PNG", new File("image.png"));
     }
+    /*
 
+     */
     public static BufferedImage painter(ArrayList<String> dataRows, int row_num, int col_num) {
         BufferedImage canvas = new BufferedImage(col_num, row_num, BufferedImage.TYPE_INT_RGB);
         for(int row = 1; row < row_num; row++) {
